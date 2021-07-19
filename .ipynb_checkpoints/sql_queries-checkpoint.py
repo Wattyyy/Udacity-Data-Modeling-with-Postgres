@@ -14,8 +14,8 @@ songplay_id INT,
 start_time TIMESTAMP,
 user_id INT,
 level VARCHAR,
-song_id INT,
-artist_id INT,
+song_id VARCHAR,
+artist_id VARCHAR,
 session_id INT,
 location VARCHAR, 
 user_agent VARCHAR);
@@ -86,7 +86,8 @@ INSERT INTO time (start_time, hour, day, week, month, year, weekday) VALUES (%s,
 # FIND SONGS
 
 song_select = ("""
-SELECT songs.song_id, artists.artist_id FROM songs, artists 
+SELECT songs.song_id, artists.artist_id 
+FROM songs INNER JOIN artists on songs.artist_id = artists.artist_id 
 WHERE songs.title = %s AND artists.name = %s AND songs.duration = %s;
 """)
 
