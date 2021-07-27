@@ -5,6 +5,10 @@ import pandas as pd
 from sql_queries import *
 
 def process_song_file(cur, filepath):
+    '''
+    Read and process'data/song_data/*/*.json' files and 
+    insert rows into "songs" and "artists"
+    '''
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -18,6 +22,11 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    '''
+    - Read and process'data/log_data/*.json'
+    - Transform timestamp column
+    - Insert rows into "time", "users" and "songplays"
+    '''
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -65,11 +74,16 @@ def process_log_file(cur, filepath):
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = [index, row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent]
+        songplay_data = [row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent]
         cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, func):
+    '''
+    - Process 'data/song_data/*/*.json' and 'data/log_data/*.json'
+    - Print logs
+    '''
+
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -89,6 +103,9 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    '''
+    Do all etl processes
+    '''
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
