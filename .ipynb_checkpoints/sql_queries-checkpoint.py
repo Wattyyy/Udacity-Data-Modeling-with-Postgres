@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS songplays(
 songplay_id SERIAL PRIMARY KEY,
 start_time TIMESTAMP,
 user_id INT,
-level VARCHAR,
+level VARCHAR NOT NULL,
 song_id VARCHAR,
 artist_id VARCHAR,
 session_id INT,
@@ -27,7 +27,7 @@ user_id INT PRIMARY KEY,
 first_name VARCHAR,
 last_name VARCHAR,
 gender VARCHAR,
-level VARCHAR);
+level VARCHAR NOT NULL);
 """)
 
 song_table_create = ("""
@@ -78,8 +78,7 @@ ON CONFLICT (song_id) DO NOTHING;
 
 artist_table_insert = ("""
 INSERT INTO artists (artist_id, name, location, latitude, longitude) VALUES (%s, %s, %s, %s, %s) 
-ON CONFLICT (artist_id) DO UPDATE SET 
-name=EXCLUDED.name, location=EXCLUDED.location, latitude=EXCLUDED.latitude, longitude=EXCLUDED.longitude;
+ON CONFLICT (artist_id) DO NOTHING;
 """)
 
 
